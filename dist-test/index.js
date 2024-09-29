@@ -22,7 +22,7 @@ let testDirectories = [];
 fs.readdirSync(path.join(testRoot, "files")).forEach((i) => {
     const directoryName = path.join(testRoot, "files", i);
     if (fs.lstatSync(directoryName).isDirectory()) {
-        if (!fs.existsSync(path.join(directoryName, "input.example"))) {
+        if (!fs.existsSync(path.join(directoryName, "input.test"))) {
             return;
         }
         if (!fs.existsSync(path.join(directoryName, "options.json"))) {
@@ -33,7 +33,7 @@ fs.readdirSync(path.join(testRoot, "files")).forEach((i) => {
 });
 const promises = Promise.all(testDirectories.map((testDir) => __awaiter(void 0, void 0, void 0, function* () {
     console.log("Running test " + path.basename(testDir));
-    const input = fs.readFileSync(path.join(testDir, "input.example"), {
+    const input = fs.readFileSync(path.join(testDir, "input.test"), {
         encoding: "utf-8",
     });
     const options = JSON.parse(fs.readFileSync(path.join(testDir, "options.json")).toString());
@@ -51,8 +51,7 @@ const promises = Promise.all(testDirectories.map((testDir) => __awaiter(void 0, 
         const expectedResult = fs
             .readFileSync(outputPath, { encoding: "utf-8" })
             .replace("\r", "");
-        let result = yield prettier
-            .format(input, Object.assign(Object.assign({}, prettierConfig), option.options));
+        let result = yield prettier.format(input, Object.assign(Object.assign({}, prettierConfig), option.options));
         result = result.replace("\r", "");
         let failAlert = [];
         if (expectedResult.length != result.length) {
@@ -70,7 +69,8 @@ const promises = Promise.all(testDirectories.map((testDir) => __awaiter(void 0, 
             }
             expectedLine += expectedResult[index];
             resultLine += index < result.length ? result[index] : "";
-            if (index >= result.length || expectedResult[index] != result[index]) {
+            if (index >= result.length ||
+                expectedResult[index] != result[index]) {
                 failAlert.push(`Result does not match expected output ` +
                     `(Char ${index}, Line ${lineCount}, Col ${expectedLine.length})`);
                 let isExpected = true;
@@ -91,6 +91,10 @@ const promises = Promise.all(testDirectories.map((testDir) => __awaiter(void 0, 
             failAlert.splice(0, 0, `Test "${path.basename(testDir)}" failed on "${option.filename}":`);
             const formattedAlert = failAlert.join("\n\t");
             console.error(formattedAlert);
+            console.log("Expected:\n\n");
+            console.log(expectedResult);
+            console.log("Received:\n\n");
+            console.log(result);
             exitCode += 1;
         }
     })));

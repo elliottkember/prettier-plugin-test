@@ -1,57 +1,58 @@
-import type { AstPath, Printer, Doc } from 'prettier';
+import type { AstPath, Printer, Doc } from "prettier";
 
-const { parsers: tsParsers } = require('prettier/parser-typescript');
+const { parsers: tsParsers } = require("prettier/parser-typescript");
 const { concat, group, hardline, softline, join, indent } =
-  require('prettier').doc.builders;
+  require("prettier").doc.builders;
 
-const printers = require('prettier/plugins/estree');
+const printers = require("prettier/plugins/estree");
 const estreePrinter = printers.printers.estree.print;
+const estreePrintComment = printers.printers.estree.printComment;
+const esTreeCanAttachComment = printers.printers.estree.canAttachComment;
 
 module.exports = {
   parsers: {
     typescript: {
       ...tsParsers.typescript,
-      astFormat: 'custom-ts', // Custom AST format for TypeScript
+      astFormat: "custom-ts", // Custom AST format for TypeScript
     },
   },
   printers: {
-    'custom-ts': {
+    "custom-ts": {
+      ...printers.printers.estree,
       print(path: AstPath<any>, options: any, print: any): Doc {
-        // console.log(options);tha
-
         const node = path.getValue();
 
         // Safely handle 'on(...).do(...)' CallExpression chain
         if (
-          node.type === 'CallExpression' &&
+          node.type === "CallExpression" &&
           node.callee &&
-          node.callee.type === 'MemberExpression' &&
+          node.callee.type === "MemberExpression" &&
           node.callee.object &&
-          node.callee.object.type === 'CallExpression' &&
+          node.callee.object.type === "CallExpression" &&
           node.callee.object.callee &&
-          node.callee.object.callee.name === 'on' &&
+          node.callee.object.callee.name === "on" &&
           node.callee.property &&
-          node.callee.property.name === 'do'
+          node.callee.property.name === "do"
         ) {
           // Safely handle 'on(...)' arguments using path.map to avoid recursion
-          const onArguments = path.map(print, 'callee', 'object', 'arguments');
+          const onArguments = path.map(print, "callee", "object", "arguments");
 
           // Safely handle 'do(...)' arguments using path.map to avoid recursion
-          const doArguments = path.map(print, 'arguments');
+          const doArguments = path.map(print, "arguments");
 
           return group(
             concat([
-              'on(',
+              "on(",
               indent(
-                concat([softline, join(concat([',', softline]), onArguments)]),
+                concat([softline, join(concat([",", softline]), onArguments)]),
               ),
               softline,
-              ').do(',
+              ").do(",
               indent(
-                concat([softline, join(concat([',', softline]), doArguments)]),
+                concat([softline, join(concat([",", softline]), doArguments)]),
               ),
               softline,
-              ')',
+              ")",
             ]),
           );
         }
