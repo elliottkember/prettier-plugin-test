@@ -43,25 +43,31 @@ module.exports = {
 
           const isJustEpic = epicArgument as any;
 
-          const name =
-            isJustEpic.contents[0].contents[0].contents[0][2].contents?.[1][0];
+          try {
+            const name =
+              isJustEpic.contents[0].contents[0].contents[0][2]
+                .contents?.[1][0];
 
-          if (name === "epic") {
-            return group(
-              concat([
-                "on(",
-                indent(
-                  concat([
-                    softline,
-                    join(concat([",", softline]), onArguments),
-                  ]),
-                ),
-                softline,
-                ").do(",
-                concat(join(", ", doArguments)),
-                ")",
-              ]),
-            );
+            if (name === "epic") {
+              return group(
+                concat([
+                  "on(",
+                  indent(
+                    concat([
+                      softline,
+                      join(concat([",", softline]), onArguments),
+                    ]),
+                  ),
+                  softline,
+                  ").do(",
+                  concat(join(", ", doArguments)),
+                  ")",
+                ]),
+              );
+            }
+          } catch (e) {
+            // If there's an error, fallback to the default behavior by calling Prettier's provided print function
+            return estreePrinter(path, options, print);
           }
         }
 
