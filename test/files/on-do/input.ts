@@ -11,3 +11,10 @@ on(Actions.main.initialize, Actions.main.wakeUp).do(
     done();
   },
 );
+
+on(Actions.main.initialize, Actions.main.wakeUp).do(
+  "this one's just epic",
+  (epic) => {
+    epic.done();
+  },
+);

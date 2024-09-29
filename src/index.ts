@@ -6,8 +6,6 @@ const { concat, group, hardline, softline, join, indent } =
 
 const printers = require("prettier/plugins/estree");
 const estreePrinter = printers.printers.estree.print;
-const estreePrintComment = printers.printers.estree.printComment;
-const esTreeCanAttachComment = printers.printers.estree.canAttachComment;
 
 module.exports = {
   parsers: {
@@ -40,18 +38,31 @@ module.exports = {
           // Safely handle 'do(...)' arguments using path.map to avoid recursion
           const doArguments = path.map(print, "arguments");
 
-          return group(
-            concat([
-              "on(",
-              indent(
-                concat([softline, join(concat([",", softline]), onArguments)]),
-              ),
-              softline,
-              ").do(",
-              concat(join(", ", doArguments)),
-              ")",
-            ]),
-          );
+          const epicArgument = doArguments[1];
+          // Get the first argument of 'do(...)' to check if it's just "epic"
+
+          const isJustEpic = epicArgument as any;
+
+          const name =
+            isJustEpic.contents[0].contents[0].contents[0][2].contents?.[1][0];
+
+          if (name === "epic") {
+            return group(
+              concat([
+                "on(",
+                indent(
+                  concat([
+                    softline,
+                    join(concat([",", softline]), onArguments),
+                  ]),
+                ),
+                softline,
+                ").do(",
+                concat(join(", ", doArguments)),
+                ")",
+              ]),
+            );
+          }
         }
 
         // For other nodes, fallback to the default behavior by calling Prettier's provided print function

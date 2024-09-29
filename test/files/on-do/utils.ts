@@ -11,7 +11,7 @@ const Actions = {
 const on = (action: unknown | unknown[], ...actions: unknown[]) => ({
   do: (
     description: string,
-    callback: (arg0: { done: () => void }) => undefined,
+    callback: (arg0: { done: () => void }) => any,
   ) => {
     callback({ done: () => {} });
   },
