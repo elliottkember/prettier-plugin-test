@@ -1,18 +1,18 @@
 {
-  "name": "prettier-plugin-nginx",
+  "name": "prettier-plugin-on-do",
   "version": "1.0.3",
-  "description": "NGINX configuration plugin for Prettier",
+  "description": "NGINX configuration plugin for on/do epics",
   "author": "Joe Dean <joe@joedean.dev>",
   "license": "MIT",
   "main": "dist/index",
   "types": "dist/index",
-  "homepage": "https://github.com/joedeandev/prettier-plugin-nginx",
+  "homepage": "https://github.com/elliottkember/prettier-plugin-test",
   "repository": {
     "type": "git",
-    "url": "https://github.com/joedeandev/prettier-plugin-nginx.git"
+    "url": "https://github.com/elliottkember/prettier-plugin-test.git"
   },
   "bugs": {
-    "url": "https://github.com/joedeandev/prettier-plugin-nginx/issues"
+    "url": "https://github.com/elliottkember/prettier-plugin-test/issues"
   },
   "keywords": [
     "nginx",
