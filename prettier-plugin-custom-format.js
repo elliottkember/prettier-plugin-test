@@ -15,7 +15,7 @@ module.exports = {
   printers: {
     "custom-ts": {
       print(path, options, print) {
-        // console.log(options);
+        // console.log(options);tha
 
         const node = path.getValue();
 

@@ -1,11 +1,4 @@
 {
-  "plugins": ["./prettier-plugin-custom-format.js"],
-  "overrides": [
-    {
-      "files": "*.ts",
-      "options": {
-        "parser": "typescript"
-      }
-    }
-  ]
+  "tabWidth": 2,
+  "useTabs": false
 }
