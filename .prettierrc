@@ -1,0 +1,11 @@
+{
+  "plugins": ["./prettier-plugin-custom-format.js"],
+  "overrides": [
+    {
+      "files": "*.ts",
+      "options": {
+        "parser": "typescript"
+      }
+    }
+  ]
+}
