@@ -32,8 +32,7 @@ module.exports = {
                         indent(concat([softline, join(concat([",", softline]), onArguments)])),
                         softline,
                         ").do(",
-                        indent(concat([softline, join(concat([",", softline]), doArguments)])),
-                        softline,
+                        concat(join(", ", doArguments)),
                         ")",
                     ]));
                 }
