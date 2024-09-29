@@ -14,7 +14,7 @@ let testDirectories: string[] = [];
 fs.readdirSync(path.join(testRoot, "files")).forEach((i) => {
   const directoryName = path.join(testRoot, "files", i);
   if (fs.lstatSync(directoryName).isDirectory()) {
-    if (!fs.existsSync(path.join(directoryName, "input.test"))) {
+    if (!fs.existsSync(path.join(directoryName, "input.ts"))) {
       return;
     }
     if (!fs.existsSync(path.join(directoryName, "options.json"))) {
@@ -27,7 +27,7 @@ fs.readdirSync(path.join(testRoot, "files")).forEach((i) => {
 const promises = Promise.all(
   testDirectories.map(async (testDir) => {
     console.log("Running test " + path.basename(testDir));
-    const input = fs.readFileSync(path.join(testDir, "input.test"), {
+    const input = fs.readFileSync(path.join(testDir, "input.ts"), {
       encoding: "utf-8",
     });
     const options = JSON.parse(
